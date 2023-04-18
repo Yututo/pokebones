@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style type="text/css">
+        .item {
+            width: 150px;
+            height: 150px;
+            background-size:100%;
+            background-repeat: no-repeat;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            height: 200px;
+            width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+        }
+        .active {
+            border: 4px solid green;
+        }
+        .timer {
+            position: absolute;
+            left: 840px;
+            top: 1px;
+        }
+        .imge {
+            background-image: url(lose.jpg);
+            background-size: 100% 100%;
+            height: 500px;
+            width: 800px;
+            position: absolute;
+            display: none;
+            left: 500px;
+            top: 50px;
+        }
+        .imge2 {
+            background-image: url(win.jpg);
+            background-size: 100% 100%;
+            height: 500px;
+            width: 800px;
+            position: absolute;
+            display: none;
+            left: 500px;
+            top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h3 class="timer">Time:<span class="time">10</span></h3>
+    <div class="imge"></div>
+    <div class="imge2"></div>
+    <div class="row">
+    </div>
+    <script type="text/javascript">
+    //див-родитель
+    let row = document.querySelector(".row");
+
+    //хранение картинок
+    let images = ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "1.png", "2.png", "3.png", "4.png", "5.png", "6.png"];
+    let img;
+    let step = 0;
+    let firstDiv;
+    let timerr = document.querySelector('.time');
+    let imge = document.querySelector('.imge');
+    let imge2 = document.querySelector('.imge2');
+    let time = 10;
+    let point = 0;
+
+    let Timer = function () {
+        time = time - 1;
+        timerr.innerHTML = " " + time;
+    }
+    
+    
+    for (i=0; i<12; i=i+1) {
+        let item = document.createElement('div');
+        row.appendChild(item);
+        item.classList.add('item');
+        let index = Math.round(Math.random()*(images.length-1))
+        item.style.backgroundImage="url("+images[index]+")";
+        images.splice(index,1);
+
+            item.onclick = function () {
+                item.classList.add('active');
+                step = step + 1;
+                if (step == 1) {
+                    img = item.style.backgroundImage;
+                    firstDiv = item;
+                }
+                if (step >= 2) {
+                    if (item.style.backgroundImage == img) {
+                    console.log('match');
+                    item.style.opacity = "0";
+                    firstDiv.style.opacity = "0";
+                    point = point + 1;
+                    } else {
+                    console.log('nomatch');
+                    firstDiv.classList.remove('active');
+                    item.classList.remove('active');
+                    }
+                    step = 0;
+                }
+            }
+    }
+
+    let endGame = function () {
+        clearInterval(interv1);
+        timerr.innerHTML = 0;
+        if (point == 6) {
+            imge2.style.display = "block";
+        } else {
+            imge.style.display = "block";
+        }
+    }
+
+    interv1 = setInterval(Timer, 1000);
+    setTimeout(endGame, 10000);
+    </script>
+</body>
+</html>
